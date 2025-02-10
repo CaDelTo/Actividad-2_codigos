@@ -1,21 +1,33 @@
-import numpy as np
 import os
 
-# Definir matrices
-A = np.array([[1, 2], [3, 4]])
-B = np.array([[5, 6], [7, 8]])
+# Crear el directorio si no existe
+results_dir = "/app/results"
+os.makedirs(results_dir, exist_ok=True)
+
+# Definir las matrices
+A = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+B = [[9, 8, 7], [6, 5, 4], [3, 2, 1]]
+
+# Verificar que se pueden multiplicar
+rows_A, cols_A = len(A), len(A[0])
+rows_B, cols_B = len(B), len(B[0])
+
+if cols_A != rows_B:
+    raise ValueError("No se pueden multiplicar estas matrices")
+
+# Inicializar la matriz resultado con ceros
+C = [[0 for _ in range(cols_B)] for _ in range(rows_A)]
 
 # Multiplicación de matrices
-resultado = np.dot(A, B)
+for i in range(rows_A):
+    for j in range(cols_B):
+        for k in range(cols_A):
+            C[i][j] += A[i][k] * B[k][j]
 
-# Ruta del archivo
-file_path = "/app/results/results.txt"
+# Guardar en archivo
+result_path = os.path.join(results_dir, "results.txt")
+with open(result_path, "w") as f:
+    for row in C:
+        f.write(" ".join(map(str, row)) + "\n")
 
-# Crear directorio si no existe
-os.makedirs(os.path.dirname(file_path), exist_ok=True)
-
-# Escribir el resultado
-with open(file_path, "a") as f:
-    f.write("Resultado de la multiplicación de matrices:\n")
-    np.savetxt(f, resultado, fmt="%d")
-    f.write("\n")
+print(f"Resultado guardado en {result_path}")

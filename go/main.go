@@ -2,42 +2,53 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"os"
-	"time"
 )
 
-const SIZE = 500
-
-func main() {
-	A := make([][]int, SIZE)
-	B := make([][]int, SIZE)
-	C := make([][]int, SIZE)
-
-	for i := range A {
-		A[i] = make([]int, SIZE)
-		B[i] = make([]int, SIZE)
-		C[i] = make([]int, SIZE)
-		for j := range A[i] {
-			A[i][j] = rand.Intn(101)
-			B[i][j] = rand.Intn(101)
-		}
-	}
-
-	start := time.Now()
-	for i := 0; i < SIZE; i++ {
-		for j := 0; j < SIZE; j++ {
-			for k := 0; k < SIZE; k++ {
-				C[i][j] += A[i][k] * B[k][j]
+func multiplyMatrices(A, B [2][2]int) [2][2]int {
+	var result [2][2]int
+	for i := 0; i < 2; i++ {
+		for j := 0; j < 2; j++ {
+			for k := 0; k < 2; k++ {
+				result[i][j] += A[i][k] * B[k][j]
 			}
 		}
 	}
-	elapsed := time.Since(start).Milliseconds()
+	return result
+}
 
-	// Guardar en results.txt
-	file, _ := os.OpenFile("/app/results/results.txt", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
+func main() {
+	A := [2][2]int{{1, 2}, {3, 4}}
+	B := [2][2]int{{5, 6}, {7, 8}}
+	result := multiplyMatrices(A, B)
+
+	dirPath := "/app/results"
+	filePath := dirPath + "/results.txt"
+
+	// Crear directorio si no existe
+	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
+		err := os.MkdirAll(dirPath, os.ModePerm)
+		if err != nil {
+			fmt.Println("Error al crear directorio:", err)
+			return
+		}
+	}
+
+	// Crear/abrir archivo y escribir resultado
+	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println("Error al abrir el archivo:", err)
+		return
+	}
 	defer file.Close()
-	fmt.Fprintf(file, "Go %d\n", elapsed)
 
-	fmt.Printf("Tiempo de ejecución (Go): %d ms\n", elapsed)
+	// Escribir los datos en el archivo
+	file.WriteString("Resultado de la multiplicación de matrices:\n")
+	for _, row := range result {
+		for _, val := range row {
+			fmt.Fprintf(file, "%d ", val)
+		}
+		file.WriteString("\n")
+	}
+	file.WriteString("\n")
 }

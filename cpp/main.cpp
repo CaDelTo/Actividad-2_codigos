@@ -1,42 +1,59 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <cstdlib>
-#include <ctime>
+#include <sys/stat.h>
 
-using namespace std;
+#ifdef _WIN32
+    #include <direct.h>  // Para Windows
+    #define MKDIR(path) _mkdir(path)
+#else
+    #include <unistd.h>  // Para Linux/Mac
+    #define MKDIR(path) mkdir(path, 0777)
+#endif
 
-const int SIZE = 500;
-
-int main() {
-    srand(time(0));
-    vector<vector<int>> A(SIZE, vector<int>(SIZE));
-    vector<vector<int>> B(SIZE, vector<int>(SIZE));
-    vector<vector<int>> C(SIZE, vector<int>(SIZE, 0));
-
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
-            A[i][j] = rand() % 101;
-            B[i][j] = rand() % 101;
-        }
-    }
-
-    clock_t start = clock();
-    for (int i = 0; i < SIZE; i++) {
-        for (int j = 0; j < SIZE; j++) {
-            for (int k = 0; k < SIZE; k++) {
-                C[i][j] += A[i][k] * B[k][j];
+void multiplyMatrices(int A[2][2], int B[2][2], int result[2][2]) {
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+            result[i][j] = 0;
+            for (int k = 0; k < 2; k++) {
+                result[i][j] += A[i][k] * B[k][j];
             }
         }
     }
-    clock_t end = clock();
-    int executionTime = (end - start) * 1000 / CLOCKS_PER_SEC;
+}
 
-    // Guardar en results.txt
-    ofstream file("/app/results/results.txt", ios::app);
-    file << "C++ " << executionTime << "\n";
+int main() {
+    int A[2][2] = {{1, 2}, {3, 4}};
+    int B[2][2] = {{5, 6}, {7, 8}};
+    int result[2][2];
+
+    multiplyMatrices(A, B, result);
+
+    std::string dirPath = "/app/results";
+    std::string filePath = dirPath + "/results.txt";
+
+    // Crear directorio si no existe
+    struct stat info;
+    if (stat(dirPath.c_str(), &info) != 0) {
+        MKDIR(dirPath.c_str());
+    }
+
+    // Escribir el archivo
+    std::ofstream file(filePath, std::ios::app);
+    if (!file) {
+        std::cerr << "Error al abrir el archivo" << std::endl;
+        return 1;
+    }
+
+    file << "Resultado de la multiplicación de matrices:\n";
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+            file << result[i][j] << " ";
+        }
+        file << "\n";
+    }
+    file << "\n";
     file.close();
 
-    cout << "Tiempo de ejecución (C++): " << executionTime << " ms" << endl;
     return 0;
 }

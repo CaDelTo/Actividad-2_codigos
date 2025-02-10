@@ -1,26 +1,36 @@
-const fs = require("fs");
+const fs = require('fs');
+const path = "/app/results/results.txt";
 
-const SIZE = 500;
-let A = Array.from({ length: SIZE }, () =>
-  Array.from({ length: SIZE }, () => Math.floor(Math.random() * 101))
-);
-let B = Array.from({ length: SIZE }, () =>
-  Array.from({ length: SIZE }, () => Math.floor(Math.random() * 101))
-);
-let C = Array.from({ length: SIZE }, () => Array(SIZE).fill(0));
-
-const start = Date.now();
-for (let i = 0; i < SIZE; i++) {
-  for (let j = 0; j < SIZE; j++) {
-    for (let k = 0; k < SIZE; k++) {
-      C[i][j] += A[i][k] * B[k][j];
-    }
-  }
+// Crear directorio si no existe
+if (!fs.existsSync("/app/results")) {
+    fs.mkdirSync("/app/results", { recursive: true });
 }
-const end = Date.now();
-const executionTime = end - start;
 
-// Guardar en results.txt
-fs.appendFileSync("/app/results/results.txt", `JavaScript ${executionTime}\n`);
+// Definir matrices
+let A = [
+    [1, 2],
+    [3, 4]
+];
+let B = [
+    [5, 6],
+    [7, 8]
+];
+let result = [[0, 0], [0, 0]];
 
-console.log(`Tiempo de ejecución (JavaScript): ${executionTime} ms`);
+// Multiplicación de matrices
+for (let i = 0; i < 2; i++) {
+    for (let j = 0; j < 2; j++) {
+        for (let k = 0; k < 2; k++) {
+            result[i][j] += A[i][k] * B[k][j];
+        }
+    }
+}
+
+// Guardar resultado en el archivo
+let data = "Resultado de la multiplicación de matrices:\n";
+result.forEach(row => {
+    data += row.join(" ") + "\n";
+});
+data += "\n";
+
+fs.appendFileSync(path, data);

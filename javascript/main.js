@@ -1,36 +1,26 @@
 const fs = require('fs');
-const path = "/app/results/results.txt";
 
-// Crear directorio si no existe
-if (!fs.existsSync("/app/results")) {
-    fs.mkdirSync("/app/results", { recursive: true });
+function isPrime(n) {
+    if (n < 2) return false;
+    for (let i = 2; i * i <= n; i++) {
+        if (n % i === 0) return false;
+    }
+    return true;
 }
 
-// Definir matrices
-let A = [
-    [1, 2],
-    [3, 4]
-];
-let B = [
-    [5, 6],
-    [7, 8]
-];
-let result = [[0, 0], [0, 0]];
-
-// Multiplicación de matrices
-for (let i = 0; i < 2; i++) {
-    for (let j = 0; j < 2; j++) {
-        for (let k = 0; k < 2; k++) {
-            result[i][j] += A[i][k] * B[k][j];
+function sumPrimes(limit) {
+    let count = 0, num = 2, total = 0;
+    while (count < limit) {
+        if (isPrime(num)) {
+            total += num;
+            count++;
         }
+        num++;
     }
 }
 
-// Guardar resultado en el archivo
-let data = "Resultado de la multiplicación de matrices:\n";
-result.forEach(row => {
-    data += row.join(" ") + "\n";
-});
-data += "\n";
+const start = Date.now();
+sumPrimes(10000);
+const end = Date.now();
 
-fs.appendFileSync(path, data);
+fs.writeFileSync('results/javascript_time.txt', (end - start).toString());

@@ -1,33 +1,27 @@
-import os
+import time
+import math
 
-# Crear el directorio si no existe
-results_dir = "/app/results"
-os.makedirs(results_dir, exist_ok=True)
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, int(math.sqrt(n)) + 1):
+        if n % i == 0:
+            return False
+    return True
 
-# Definir las matrices
-A = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-B = [[9, 8, 7], [6, 5, 4], [3, 2, 1]]
+def sum_primes(limit):
+    count, num, total = 0, 2, 0
+    while count < limit:
+        if is_prime(num):
+            total += num
+            count += 1
+        num += 1
 
-# Verificar que se pueden multiplicar
-rows_A, cols_A = len(A), len(A[0])
-rows_B, cols_B = len(B), len(B[0])
+start_time = time.time()
+sum_primes(10000)
+end_time = time.time()
 
-if cols_A != rows_B:
-    raise ValueError("No se pueden multiplicar estas matrices")
+execution_time = int((end_time - start_time) * 1000)
 
-# Inicializar la matriz resultado con ceros
-C = [[0 for _ in range(cols_B)] for _ in range(rows_A)]
-
-# Multiplicación de matrices
-for i in range(rows_A):
-    for j in range(cols_B):
-        for k in range(cols_A):
-            C[i][j] += A[i][k] * B[k][j]
-
-# Guardar en archivo
-result_path = os.path.join(results_dir, "results.txt")
-with open(result_path, "w") as f:
-    for row in C:
-        f.write(" ".join(map(str, row)) + "\n")
-
-print(f"Resultado guardado en {result_path}")
+with open("results/python_time.txt", "w") as f:
+    f.write(str(execution_time))

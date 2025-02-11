@@ -33,6 +33,7 @@ func main() {
 	sumPrimes(10000)
 	duration := time.Since(start)
 
+	println("Go execution time:", duration, "ms")
 	file, _ := os.Create("results/go_time.txt")
 	defer file.Close()
 	file.WriteString(strconv.FormatInt(duration.Milliseconds(), 10))

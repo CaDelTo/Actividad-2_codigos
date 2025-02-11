@@ -16,7 +16,7 @@ for lang in languages:
 sorted_times = sorted(times.items(), key=lambda x: x[1] if isinstance(x[1], int) else float("inf"))
 
 # Mostrar tabla
-print("\nBenchmark Results:")
+
 print("=" * 40)
 print(f"{'Language':<12} | {'Execution Time (ms)':>20}")
 print("-" * 40)

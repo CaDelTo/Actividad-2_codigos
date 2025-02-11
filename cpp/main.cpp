@@ -27,6 +27,8 @@ int main() {
     sum_primes(10000);
     auto end = std::chrono::high_resolution_clock::now();
     
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    std::cout << "C++ execution time: " << duration << " ms" << std::endl;
     std::ofstream file("results/cpp_time.txt");
     file << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     file.close();

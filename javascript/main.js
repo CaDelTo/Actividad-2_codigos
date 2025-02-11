@@ -23,4 +23,5 @@ const start = Date.now();
 sumPrimes(10000);
 const end = Date.now();
 
+console.log(`JS execution time: ${end - start} ms`);
 fs.writeFileSync('results/javascript_time.txt', (end - start).toString());

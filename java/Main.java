@@ -26,6 +26,7 @@ public class Main {
         sumPrimes(10000);
         long end = System.currentTimeMillis();
         
+        System.out.println("Java execution time: " + (end - start) + "ms");
         try (FileWriter writer = new FileWriter("results/java_time.txt")) {
             writer.write(Long.toString(end - start));
         } catch (IOException e) {

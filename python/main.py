@@ -22,6 +22,6 @@ sum_primes(10000)
 end_time = time.time()
 
 execution_time = int((end_time - start_time) * 1000)
-
+print(f"Python execution time: {execution_time} ms")
 with open("results/python_time.txt", "w") as f:
     f.write(str(execution_time))

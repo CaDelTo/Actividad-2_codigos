@@ -6,18 +6,18 @@
 
 using namespace std;
 
-// Función para generar una matriz aleatoria de tamaño N x N
+
 vector<vector<double>> generate_matrix(int n) {
     vector<vector<double>> matrix(n, vector<double>(n));
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            matrix[i][j] = (double)rand() / RAND_MAX; // Números aleatorios entre 0 y 1
+            matrix[i][j] = (double)rand() / RAND_MAX; 
         }
     }
     return matrix;
 }
 
-// Función para multiplicar dos matrices de tamaño N x N
+
 vector<vector<double>> multiply_matrices(const vector<vector<double>>& A, const vector<vector<double>>& B, int n) {
     vector<vector<double>> C(n, vector<double>(n, 0));
     for (int i = 0; i < n; i++) {
@@ -31,7 +31,7 @@ vector<vector<double>> multiply_matrices(const vector<vector<double>>& A, const 
 }
 
 int main() {
-    const int N = 200; // Tamaño de la matriz
+    const int N = 200;
     srand(time(0));
 
     vector<vector<double>> A = generate_matrix(N);

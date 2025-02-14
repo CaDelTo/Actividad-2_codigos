@@ -12,7 +12,7 @@ def multiply_matrices(A, B, n):
                 C[i][j] += A[i][k] * B[k][j]
     return C
 
-N = 200  # Tamaño de la matriz
+N = 200
 A = generate_matrix(N)
 B = generate_matrix(N)
 

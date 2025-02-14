@@ -27,7 +27,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        int N = 200; // Tamaño de la matriz
+        int N = 200;
         double[][] A = generateMatrix(N);
         double[][] B = generateMatrix(N);
 

@@ -1,13 +1,10 @@
 const fs = require('fs');
 
-// Genera una matriz cuadrada de tamaño n con valores aleatorios
 function generateMatrix(n) {
     return Array.from({ length: n }, () => 
         Array.from({ length: n }, () => Math.random())
     );
 }
-
-// Multiplica dos matrices cuadradas de tamaño n
 function multiplyMatrices(A, B, n) {
     let C = Array.from({ length: n }, () => Array(n).fill(0));
 
@@ -21,7 +18,7 @@ function multiplyMatrices(A, B, n) {
     return C;
 }
 
-const N = 200; // Tamaño de la matriz
+const N = 200;
 const A = generateMatrix(N);
 const B = generateMatrix(N);
 

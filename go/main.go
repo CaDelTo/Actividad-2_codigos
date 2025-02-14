@@ -1,39 +1,52 @@
 package main
 
 import (
+	"fmt"
+	"math/rand"
 	"os"
 	"strconv"
 	"time"
 )
 
-func isPrime(n int) bool {
-	if n < 2 {
-		return false
-	}
-	for i := 2; i*i <= n; i++ {
-		if n%i == 0 {
-			return false
+// Genera una matriz cuadrada de tamaño n con valores aleatorios
+func generateMatrix(n int) [][]float64 {
+	matrix := make([][]float64, n)
+	for i := range matrix {
+		matrix[i] = make([]float64, n)
+		for j := range matrix[i] {
+			matrix[i][j] = rand.Float64() // Valores entre 0 y 1
 		}
 	}
-	return true
+	return matrix
 }
 
-func sumPrimes(limit int) {
-	count, num := 0, 2
-	for count < limit {
-		if isPrime(num) {
-			count++
+// Multiplica dos matrices cuadradas de tamaño n
+func multiplyMatrices(A, B [][]float64, n int) [][]float64 {
+	C := make([][]float64, n)
+	for i := range C {
+		C[i] = make([]float64, n)
+		for j := 0; j < n; j++ {
+			for k := 0; k < n; k++ {
+				C[i][j] += A[i][k] * B[k][j]
+			}
 		}
-		num++
 	}
+	return C
 }
 
 func main() {
+	const N = 200 // Tamaño de la matriz
+	rand.Seed(time.Now().UnixNano())
+
+	A := generateMatrix(N)
+	B := generateMatrix(N)
+
 	start := time.Now()
-	sumPrimes(10000)
+	multiplyMatrices(A, B, N)
 	duration := time.Since(start)
 
-	println("Go execution time:", duration, "ms")
+	fmt.Println("Go execution time:", duration.Milliseconds(), "ms")
+
 	file, _ := os.Create("results/go_time.txt")
 	defer file.Close()
 	file.WriteString(strconv.FormatInt(duration.Milliseconds(), 10))

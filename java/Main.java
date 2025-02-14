@@ -1,34 +1,45 @@
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Random;
 
-public class Main {
-    public static boolean isPrime(int n) {
-        if (n < 2) return false;
-        for (int i = 2; i * i <= n; i++) {
-            if (n % i == 0) return false;
+public class main {
+    public static double[][] generateMatrix(int n) {
+        double[][] matrix = new double[n][n];
+        Random rand = new Random();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                matrix[i][j] = rand.nextDouble();
+            }
         }
-        return true;
+        return matrix;
     }
 
-    public static void sumPrimes(int limit) {
-        int count = 0, num = 2, total = 0;
-        while (count < limit) {
-            if (isPrime(num)) {
-                total += num;
-                count++;
+    public static double[][] multiplyMatrices(double[][] A, double[][] B, int n) {
+        double[][] C = new double[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < n; k++) {
+                    C[i][j] += A[i][k] * B[k][j];
+                }
             }
-            num++;
         }
+        return C;
     }
 
     public static void main(String[] args) {
+        int N = 200; // Tamaño de la matriz
+        double[][] A = generateMatrix(N);
+        double[][] B = generateMatrix(N);
+
         long start = System.currentTimeMillis();
-        sumPrimes(10000);
+        multiplyMatrices(A, B, N);
         long end = System.currentTimeMillis();
-        
-        System.out.println("Java execution time: " + (end - start) + "ms");
+
+        long executionTime = end - start;
+        System.out.println("Java execution time: " + executionTime + " ms");
+
         try (FileWriter writer = new FileWriter("results/java_time.txt")) {
-            writer.write(Long.toString(end - start));
+            writer.write(Long.toString(executionTime));
         } catch (IOException e) {
             e.printStackTrace();
         }

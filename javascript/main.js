@@ -1,26 +1,32 @@
 const fs = require('fs');
 
-function isPrime(n) {
-    if (n < 2) return false;
-    for (let i = 2; i * i <= n; i++) {
-        if (n % i === 0) return false;
-    }
-    return true;
+// Genera una matriz cuadrada de tamaño n con valores aleatorios
+function generateMatrix(n) {
+    return Array.from({ length: n }, () => 
+        Array.from({ length: n }, () => Math.random())
+    );
 }
 
-function sumPrimes(limit) {
-    let count = 0, num = 2, total = 0;
-    while (count < limit) {
-        if (isPrime(num)) {
-            total += num;
-            count++;
+// Multiplica dos matrices cuadradas de tamaño n
+function multiplyMatrices(A, B, n) {
+    let C = Array.from({ length: n }, () => Array(n).fill(0));
+
+    for (let i = 0; i < n; i++) {
+        for (let j = 0; j < n; j++) {
+            for (let k = 0; k < n; k++) {
+                C[i][j] += A[i][k] * B[k][j];
+            }
         }
-        num++;
     }
+    return C;
 }
+
+const N = 200; // Tamaño de la matriz
+const A = generateMatrix(N);
+const B = generateMatrix(N);
 
 const start = Date.now();
-sumPrimes(10000);
+multiplyMatrices(A, B, N);
 const end = Date.now();
 
 console.log(`JS execution time: ${end - start} ms`);

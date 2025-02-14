@@ -1,37 +1,52 @@
 #include <iostream>
+#include <vector>
 #include <fstream>
-#include <cmath>
 #include <chrono>
+#include <cstdlib>
 
-bool is_prime(int n) {
-    if (n < 2) return false;
-    for (int i = 2; i * i <= n; i++) {
-        if (n % i == 0) return false;
+using namespace std;
+
+// Función para generar una matriz aleatoria de tamaño N x N
+vector<vector<double>> generate_matrix(int n) {
+    vector<vector<double>> matrix(n, vector<double>(n));
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            matrix[i][j] = (double)rand() / RAND_MAX; // Números aleatorios entre 0 y 1
+        }
     }
-    return true;
+    return matrix;
 }
 
-void sum_primes(int limit) {
-    int count = 0, num = 2, total = 0;
-    while (count < limit) {
-        if (is_prime(num)) {
-            total += num;
-            count++;
+// Función para multiplicar dos matrices de tamaño N x N
+vector<vector<double>> multiply_matrices(const vector<vector<double>>& A, const vector<vector<double>>& B, int n) {
+    vector<vector<double>> C(n, vector<double>(n, 0));
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            for (int k = 0; k < n; k++) {
+                C[i][j] += A[i][k] * B[k][j];
+            }
         }
-        num++;
     }
+    return C;
 }
 
 int main() {
-    auto start = std::chrono::high_resolution_clock::now();
-    sum_primes(10000);
-    auto end = std::chrono::high_resolution_clock::now();
-    
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
-    std::cout << "C++ execution time: " << duration << " ms" << std::endl;
-    std::ofstream file("results/cpp_time.txt");
-    file << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    const int N = 200; // Tamaño de la matriz
+    srand(time(0));
+
+    vector<vector<double>> A = generate_matrix(N);
+    vector<vector<double>> B = generate_matrix(N);
+
+    auto start = chrono::high_resolution_clock::now();
+    multiply_matrices(A, B, N);
+    auto end = chrono::high_resolution_clock::now();
+
+    auto duration = chrono::duration_cast<chrono::milliseconds>(end - start).count();
+    cout << "C++ execution time: " << duration << " ms" << endl;
+
+    ofstream file("results/cpp_time.txt");
+    file << duration;
     file.close();
 
-    return 0;
+    return duration;
 }

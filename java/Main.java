@@ -2,7 +2,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Random;
 
-public class main {
+public class Main {
     public static double[][] generateMatrix(int n) {
         double[][] matrix = new double[n][n];
         Random rand = new Random();
